@@ -7,12 +7,23 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptor;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
+import com.google.android.gms.maps.model.GroundOverlay;
+import com.google.android.gms.maps.model.GroundOverlayOptions;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback {
 
     private GoogleMap mMap;
+
+    private GroundOverlay mGroundOverlay;
+
+    private final List<BitmapDescriptor> mImages = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,10 +48,17 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
+        mImages.add(BitmapDescriptorFactory.fromResource(R.drawable.adaro_mine_overlay));
 
         // Add a marker in Sydney and move the camera
-        LatLng latLng = new LatLng(-1.871757, 115.545004);
-        mMap.addMarker(new MarkerOptions().position(latLng).title("Marker in TestPlace"));
-        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 10));
+        LatLng mineLatLng = new LatLng(-2.10, 115.34);
+        LatLng imageStartLatLng = new LatLng(-1.642304, 114.384871);
+        mMap.addMarker(new MarkerOptions().position(mineLatLng).title("Marker in TestPlace"));
+        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(mineLatLng, 9));
+
+        mGroundOverlay = googleMap.addGroundOverlay(new GroundOverlayOptions()
+                    .image(mImages.get(0))
+                    .anchor(0,0)
+                    .position(imageStartLatLng, 150000f));
     }
 }
